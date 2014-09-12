@@ -501,7 +501,13 @@ func GetCallerName(depth int) string {
 	// Use the caller function name as a prefix.
 	// This helps trace temp directories back to their test.
 	pc, _, _, _ := runtime.Caller(depth + 1)
-	callerLongName := runtime.FuncForPC(pc).Name()
+	fun := runtime.FuncForPC(pc)
+	var callerLongName string
+	if fun != nil {
+		callerLongName = fun.Name()
+	} else {
+		callerLongName = "who-knows"
+	}
 	parts := strings.Split(callerLongName, ".")
 	callerShortName := parts[len(parts)-1]
 	return callerShortName
