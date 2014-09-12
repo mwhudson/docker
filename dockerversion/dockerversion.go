@@ -13,3 +13,11 @@ var (
 	INITSHA1  string // sha1sum of separate static dockerinit, if Docker itself was compiled dynamically via ./hack/make.sh dynbinary
 	INITPATH  string // custom location to search for a valid dockerinit binary (available for packagers as a last resort escape hatch)
 )
+
+
+func init () {
+	IAMSTATIC = true
+	GITCOMMIT = "2bf41be"
+	VERSION = "1.2.0-dev"
+}
+
