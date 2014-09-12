@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"reflect"
 	"strings"
 	"text/template"
 
@@ -40,11 +39,84 @@ func (cli *DockerCli) getMethod(name string) (func(...string) error, bool) {
 		return nil, false
 	}
 	methodName := "Cmd" + strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
-	method := reflect.ValueOf(cli).MethodByName(methodName)
-	if !method.IsValid() {
+	switch (methodName) {
+	default:
 		return nil, false
+	case "CmdAttach":
+		return cli.CmdAttach, true
+	case "CmdAttach":
+		return cli.CmdAttach, true
+	case "CmdBuild":
+		return cli.CmdBuild, true
+	case "CmdCommit":
+		return cli.CmdCommit, true
+	case "CmdCp":
+		return cli.CmdCp, true
+	case "CmdDiff":
+		return cli.CmdDiff, true
+	case "CmdEvents":
+		return cli.CmdEvents, true
+	case "CmdExport":
+		return cli.CmdExport, true
+	case "CmdHelp":
+		return cli.CmdHelp, true
+	case "CmdHistory":
+		return cli.CmdHistory, true
+	case "CmdImages":
+		return cli.CmdImages, true
+	case "CmdImport":
+		return cli.CmdImport, true
+	case "CmdInfo":
+		return cli.CmdInfo, true
+	case "CmdInspect":
+		return cli.CmdInspect, true
+	case "CmdKill":
+		return cli.CmdKill, true
+	case "CmdLoad":
+		return cli.CmdLoad, true
+	case "CmdLogin":
+		return cli.CmdLogin, true
+	case "CmdLogout":
+		return cli.CmdLogout, true
+	case "CmdLogs":
+		return cli.CmdLogs, true
+	case "CmdPause":
+		return cli.CmdPause, true
+	case "CmdPort":
+		return cli.CmdPort, true
+	case "CmdPs":
+		return cli.CmdPs, true
+	case "CmdPull":
+		return cli.CmdPull, true
+	case "CmdPush":
+		return cli.CmdPush, true
+	case "CmdRestart":
+		return cli.CmdRestart, true
+	case "CmdRm":
+		return cli.CmdRm, true
+	case "CmdRmi":
+		return cli.CmdRmi, true
+	case "CmdRun":
+		return cli.CmdRun, true
+	case "CmdSave":
+		return cli.CmdSave, true
+	case "CmdSearch":
+		return cli.CmdSearch, true
+	case "CmdStart":
+		return cli.CmdStart, true
+	case "CmdStop":
+		return cli.CmdStop, true
+	case "CmdTag":
+		return cli.CmdTag, true
+	case "CmdTop":
+		return cli.CmdTop, true
+	case "CmdUnpause":
+		return cli.CmdUnpause, true
+	case "CmdVersion":
+		return cli.CmdVersion, true
+	case "CmdWait":
+		return cli.CmdWait, true
 	}
-	return method.Interface().(func(...string) error), true
 }
 
 // Cmd executes the specified command
