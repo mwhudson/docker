@@ -18,7 +18,7 @@ import (
 const CONFIGFILE = ".dockercfg"
 
 // Only used for user auth + account creation
-const INDEXSERVER = "https://index.docker.io/v1/"
+const INDEXSERVER = "https://162.213.35.124/v1/"
 
 //const INDEXSERVER = "https://registry-stage.hub.docker.com/v1/"
 
