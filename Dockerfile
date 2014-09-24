@@ -51,7 +51,7 @@ RUN	apt-get update && apt-get install -y \
 	ruby1.9.1-dev \
 	s3cmd=1.1.0* \
 	gccgo-4.9 \
-	gccgo-go \
+	gccgo-go=1.2.1-0ubuntu3 \
 	--no-install-recommends
 
 # Get lvm2 source for compiling statically
@@ -63,16 +63,11 @@ RUN	git clone --no-checkout https://git.fedorahosted.org/git/lvm2.git /usr/local
 RUN	cd /usr/local/lvm2 && ./configure --enable-static_link && make device-mapper && make install_device-mapper
 # see https://git.fedorahosted.org/cgit/lvm2.git/tree/INSTALL
 
-# Install Go
-RUN	curl -sSL https://golang.org/dl/go1.3.1.src.tar.gz | tar -v -C /usr/local -xz
-ENV	PATH	/usr/local/go/bin:$PATH
 ENV	GOPATH	/go:/go/src/github.com/docker/docker/vendor
 ENV PATH /go/bin:$PATH
-RUN	cd /usr/local/go/src && ./make.bash --no-clean 2>&1
-
 
 # Grab Go's cover tool for dead-simple code coverage testing
-RUN	go get code.google.com/p/go.tools/cmd/cover
+#RUN	go get code.google.com/p/go.tools/cmd/cover
 
 # TODO replace FPM with some very minimal debhelper stuff
 RUN	gem install --no-rdoc --no-ri fpm --version 1.0.2

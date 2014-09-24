@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 # This script builds various binary artifacts from a checkout of the docker
 # source code.
@@ -27,7 +27,7 @@ export DOCKER_PKG='github.com/docker/docker'
 
 # We're a nice, sexy, little shell script, and people might try to run us;
 # but really, they shouldn't. We want to be in a container!
-if [ "$(pwd)" != "/go/src/$DOCKER_PKG" ] || [ -z "$DOCKER_CROSSPLATFORMS" ]; then
+if [ "$(pwd)" != "/go/src/$DOCKER_PKG" ]; then
 	{
 		echo "# WARNING! I don't seem to be running in the Docker container."
 		echo "# The result of this command might be an incorrect build, and will not be"
@@ -94,24 +94,24 @@ if [ -z "$DOCKER_CLIENTONLY" ]; then
 	DOCKER_BUILDTAGS+=" daemon"
 fi
 
+cat > dockerversion/details.go <<EOF
+package dockerversion
+
+func init () {
+	GITCOMMIT = "$GITCOMMIT"
+	VERSION = "$VERSION"
+}
+EOF
+
 # Use these flags when compiling the tests and final binary
-LDFLAGS='
-	-w
-	-X '$DOCKER_PKG'/dockerversion.GITCOMMIT "'$GITCOMMIT'"
-	-X '$DOCKER_PKG'/dockerversion.VERSION "'$VERSION'"
-'
-LDFLAGS_STATIC='-linkmode external'
+LDFLAGS=''
 EXTLDFLAGS_STATIC='-static'
 BUILDFLAGS=( -a -tags "netgo static_build $DOCKER_BUILDTAGS" )
 
 # A few more flags that are specific just to building a completely-static binary (see hack/make/binary)
 # PLEASE do not use these anywhere else.
 EXTLDFLAGS_STATIC_DOCKER="$EXTLDFLAGS_STATIC -lpthread -Wl,--unresolved-symbols=ignore-in-object-files"
-LDFLAGS_STATIC_DOCKER="
-	$LDFLAGS_STATIC
-	-X $DOCKER_PKG/dockerversion.IAMSTATIC true
-	-extldflags \"$EXTLDFLAGS_STATIC_DOCKER\"
-"
+LDFLAGS_STATIC_DOCKER="$EXTLDFLAGS_STATIC_DOCKER"
 
 if [ "$(uname -s)" = 'FreeBSD' ]; then
 	# Tell cgo the compiler is Clang, not GCC

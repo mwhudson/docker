@@ -5,11 +5,10 @@ DEST=$1
 
 go build \
 	-o "$DEST/docker-$VERSION" \
+ 	-x -p 1 \
 	"${BUILDFLAGS[@]}" \
-	-ldflags "
-		$LDFLAGS
-		$LDFLAGS_STATIC_DOCKER
-	" \
+	-compiler gccgo \
+	-gccgoflags "$LDFLAGS $LDFLAGS_STATIC_DOCKER" \
 	./docker
 echo "Created binary: $DEST/docker-$VERSION"
 ln -sf "docker-$VERSION" "$DEST/docker"
