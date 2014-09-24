@@ -5,7 +5,6 @@ DEST=$1
 
 go build \
 	-o "$DEST/docker-$VERSION" \
- 	-x -p 1 \
 	"${BUILDFLAGS[@]}" \
 	-compiler gccgo \
 	-gccgoflags "$LDFLAGS $LDFLAGS_STATIC_DOCKER" \
