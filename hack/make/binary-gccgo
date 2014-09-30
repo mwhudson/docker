@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+
+DEST=$1
+
+: ${IAMSTATIC:=true}
+
+cat > dockerversion/static.go <<EOF
+package dockerversion
+
+func init() {
+	IAMSTATIC = $IAMSTATIC
+}
+EOF
+
+go build \
+	-o "$DEST/docker-$VERSION" \
+	"${BUILDFLAGS[@]}" \
+	-compiler gccgo \
+	-gccgoflags "
+		$GCCGOFLAGS
+		$GCCGOFLAGS_STATIC
+	" \
+	./docker
+echo "Created binary: $DEST/docker-$VERSION"
+ln -sf "docker-$VERSION" "$DEST/docker"
+
+hash_files "$DEST/docker-$VERSION"
