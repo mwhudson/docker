@@ -27,6 +27,9 @@ docker-version	0.6.1
 FROM	ubuntu:14.04
 MAINTAINER	Tianon Gravi <admwiggin@gmail.com> (@tianon)
 
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2F51AC01
+RUN echo 'deb http://ppa.launchpad.net/mwhudson/gccgo-cgo/ubuntu trusty main' >> /etc/apt/sources.list
+
 # Packaged dependencies
 RUN	apt-get update && apt-get install -y \
 	aufs-tools \
@@ -35,6 +38,8 @@ RUN	apt-get update && apt-get install -y \
 	build-essential \
 	curl \
 	dpkg-sig \
+	gccgo \
+	gccgo-4.9 \
 	git \
 	iptables \
 	libapparmor-dev \
