@@ -3,6 +3,16 @@ set -e
 
 DEST=$1
 
+: ${IAMSTATIC:=true}
+
+cat > dockerversion/static.go <<EOF
+package dockerversion
+
+func init() {
+	IAMSTATIC = $IAMSTATIC
+}
+EOF
+
 go build \
 	-o "$DEST/docker-$VERSION" \
 	"${BUILDFLAGS[@]}" \
