@@ -94,14 +94,18 @@ if [ -z "$DOCKER_CLIENTONLY" ]; then
 	DOCKER_BUILDTAGS+=" daemon"
 fi
 
-rm -f dockerversion/static.go
+rm -f dockerversion/static.go dockerversion/details.go
+cat > dockerversion/details.go <<EOF
+package dockerversion
+
+func init() {
+	GITCOMMIT = "$GITCOMMIT"
+	VERSION = "$VERSION"
+}
+EOF
 
 # Use these flags when compiling the tests and final binary
-LDFLAGS='
-	-w
-	-X '$DOCKER_PKG'/dockerversion.GITCOMMIT "'$GITCOMMIT'"
-	-X '$DOCKER_PKG'/dockerversion.VERSION "'$VERSION'"
-'
+LDFLAGS='-w'
 LDFLAGS_STATIC='-linkmode external'
 EXTLDFLAGS_STATIC='-static'
 # ORIG_BUILDFLAGS is necessary for the cross target which cannot always build
